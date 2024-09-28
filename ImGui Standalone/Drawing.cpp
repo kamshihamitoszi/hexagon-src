@@ -11,11 +11,15 @@ int maxcps2 = 20;
 int posy = 280;
 int posy2 = 280;
 int cwel = 0;
+int cwel2 = 0;
 int toogle_bind = { 0 };
 int hold_bind = { 0 };
+int toogle_bind2 = { 0 };
+int hold_bind2 = { 0 };
 bool boxes_gui = false;
 bool health_gui = false;
 int leftclicker_bind = { 0 };
+int rightclicker_bind = { 0 };
 bool Drawing::bDraw = true;
 bool clicker_on = false;
 bool rclicker_on = false;
@@ -37,6 +41,9 @@ enum heads {
 void binds() {
     if (GetAsyncKeyState(leftclicker_bind) & 1) {
         niga_gui ^= 1;
+    }
+    if (GetAsyncKeyState(rightclicker_bind) & 1) {
+        rclicker_on ^= 1;
     }
 }
 void clicker_left() {
@@ -84,7 +91,7 @@ void clicker_left() {
 }
 void clicker_right() {
 
-    
+    if (cwel2 == 0) {
         static CTimer timer(std::chrono::milliseconds(1000 / mincps2));
         if (!rclicker_on || !(GetKeyState(VK_RBUTTON) & 0x8000))
             return;
@@ -96,8 +103,33 @@ void clicker_right() {
         PostMessageA(FindWindowA("LWJGL", nullptr), WM_RBUTTONUP, MK_RBUTTON, MAKELPARAM(cursorPos.x, cursorPos.y));
         std::uniform_int_distribution<> distr(mincps2, maxcps2);
         timer.setEvery(std::chrono::milliseconds(1000 / distr(gen)));
-    
-
+    }
+    if (cwel2 == 1) {
+        static CTimer timer(std::chrono::milliseconds(1000 / mincps2));
+        if (!rclicker_on || !(GetKeyState(toogle_bind2) & 1))
+            return;
+        if (!timer.isElapsed())
+            return;
+        POINT cursorPos{};
+        GetCursorPos(&cursorPos);
+        PostMessageA(FindWindowA("LWJGL", nullptr), WM_RBUTTONDOWN, MK_RBUTTON, MAKELPARAM(cursorPos.x, cursorPos.y));
+        PostMessageA(FindWindowA("LWJGL", nullptr), WM_RBUTTONUP, MK_RBUTTON, MAKELPARAM(cursorPos.x, cursorPos.y));
+        std::uniform_int_distribution<> distr(mincps2, maxcps2);
+        timer.setEvery(std::chrono::milliseconds(1000 / distr(gen)));
+    }
+    if (cwel2 == 2) {
+        static CTimer timer(std::chrono::milliseconds(1000 / mincps2));
+        if (!rclicker_on || !(GetKeyState(hold_bind2) & 0x8000))
+            return;
+        if (!timer.isElapsed())
+            return;
+        POINT cursorPos{};
+        GetCursorPos(&cursorPos);
+        PostMessageA(FindWindowA("LWJGL", nullptr), WM_RBUTTONDOWN, MK_RBUTTON, MAKELPARAM(cursorPos.x, cursorPos.y));
+        PostMessageA(FindWindowA("LWJGL", nullptr), WM_RBUTTONUP, MK_RBUTTON, MAKELPARAM(cursorPos.x, cursorPos.y));
+        std::uniform_int_distribution<> distr(mincps2, maxcps2);
+        timer.setEvery(std::chrono::milliseconds(1000 / distr(gen)));
+    }
 }
 static heads head_selected = HEAD_1;
 static bool checkbox[1]{};
@@ -106,6 +138,8 @@ bool niga = false;
 
 static int combobox, sliderscalar = 0;
 const char* combobox_items[3] = { "MHold", "Toogle", "Hold"};
+static int combobox2, sliderscalar2 = 0;
+const char* combobox_items2[3] = { "MHold", "Toogle", "Hold"};
 void Drawing::Draw()
 {
 	if (isActive())
@@ -185,7 +219,17 @@ void Drawing::Draw()
                         
                        ImGui::SetCursorPosY(ImGui::GetCursorPosY() - 10);
                         edited::Keybind("Bind", "", &leftclicker_bind);
-                        
+                        if (leftclicker_bind > 0) {
+                            if (ImGui::IsItemHovered()) {
+                                ImGui::BeginTooltip();
+                                ImGui::Text("If you want clear the bind click Delete key");
+                                ImGui::EndTooltip();
+                            }
+                            else {
+
+                                ImGui::CloseCurrentPopup();
+                            }
+                        }
                         ImGui::SetCursorPosY(ImGui::GetCursorPosY() - 10);
                         ImGui::Combo("", &combobox, combobox_items, IM_ARRAYSIZE(combobox_items));
                         if (combobox == 0) {
@@ -194,18 +238,35 @@ void Drawing::Draw()
                             cwel = 1;
                             edited::Keybind("Tg Bind", "", &toogle_bind);
                             posy = 320;
-                        }
-                        else
-                        {
-                            posy = 280;
+                            if (toogle_bind > 0) {
+                                if (ImGui::IsItemHovered()) {
+                                    ImGui::BeginTooltip();
+                                    ImGui::Text("If you want clear the bind click Delete key");
+                                    ImGui::EndTooltip();
+                                }
+                                else {
+
+                                    ImGui::CloseCurrentPopup();
+                                }
+                            }
                         }
                         if (combobox == 2) {
                             cwel = 2;
                             edited::Keybind("Hold Bind", "", &hold_bind);
                             posy = 320;
+                            if (hold_bind > 0) {
+                                if (ImGui::IsItemHovered()) {
+                                    ImGui::BeginTooltip();
+                                    ImGui::Text("If you want clear the bind click Delete key");
+                                    ImGui::EndTooltip();
+                                }
+                                else {
+
+                                    ImGui::CloseCurrentPopup();
+                                }
+                            }
                         }
-                        else
-                        {
+                        if (cwel == 0) {
                             posy = 280;
                         }
                        // ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 5);
@@ -249,7 +310,66 @@ void Drawing::Draw()
                         ImGui::Checkbox2("break blocks", &checkbox[0]);
                     }
                     ImGui::EndChild();
-                   
+                    ImGui::SetCursorPos({ 285, 220 });
+                    ImGui::BeginChild("##container1123123234", ImVec2(147, 150), false, ImGuiWindowFlags_NoScrollbar); {
+
+                        ImGui::SetCursorPosY(ImGui::GetCursorPosY() - 10);
+                        edited::Keybind("Bind", "", &rightclicker_bind);
+                        if (rightclicker_bind > 0) {
+                            if (ImGui::IsItemHovered()) {
+                                ImGui::BeginTooltip();
+                                ImGui::Text("If you want clear the bind click Delete key");
+                                ImGui::EndTooltip();
+                            }
+                            else {
+
+                                ImGui::CloseCurrentPopup();
+                            }
+                        }
+                        ImGui::SetCursorPosY(ImGui::GetCursorPosY() - 10);
+                        ImGui::Combo("", &combobox2, combobox_items2, IM_ARRAYSIZE(combobox_items2));
+                        if (combobox2 == 0) {
+                            cwel2 = 0;
+                        } if (combobox2 == 1) {
+                            cwel2 = 1;
+                            edited::Keybind("Tg Bind", "", &toogle_bind2);
+                            posy2 = 320;
+                            if (toogle_bind2 > 0) {
+                                if (ImGui::IsItemHovered()) {
+                                    ImGui::BeginTooltip();
+                                    ImGui::Text("If you want clear the bind click Delete key");
+                                    ImGui::EndTooltip();
+                                }
+                                else {
+
+                                    ImGui::CloseCurrentPopup();
+                                }
+                            }
+                        }
+                        if (combobox2 == 2) {
+                            cwel2 = 2;
+                            edited::Keybind("Hold Bind", "", &hold_bind2);
+                            posy2 = 320;
+                            if (hold_bind2 > 0) {
+                                if (ImGui::IsItemHovered()) {
+                                    ImGui::BeginTooltip();
+                                    ImGui::Text("If you want clear the bind click Delete key");
+                                    ImGui::EndTooltip();
+                                }
+                                else {
+
+                                    ImGui::CloseCurrentPopup();
+                                }
+                            }
+                        }
+                        
+                        if (cwel2 == 0) {
+                            posy2 = 280;
+                        }
+                        // ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 5);
+                         //ImGui::Checkbox2("break blocks", &checkbox[1]);
+                    }
+                    ImGui::EndChild();
                    // draw->AddText(mediumxxddd, 14.0f, ImVec2(pos.x + 285, pos.y + 60), ImColor(1.0f, 1.0f, 1.0f, 0.6f), "Settings");
                     
                     ImGui::SetCursorPos({ 155, 135 });
