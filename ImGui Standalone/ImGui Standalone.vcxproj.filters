@@ -24,9 +24,6 @@
     <ClCompile Include="ImGui\imgui.cpp">
       <Filter>Fichiers d%27en-tête\ImGui</Filter>
     </ClCompile>
-    <ClCompile Include="ImGui\imgui_demo.cpp">
-      <Filter>Fichiers d%27en-tête\ImGui</Filter>
-    </ClCompile>
     <ClCompile Include="ImGui\imgui_draw.cpp">
       <Filter>Fichiers d%27en-tête\ImGui</Filter>
     </ClCompile>
@@ -186,6 +183,18 @@
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
     <ClInclude Include="gwalt.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="colors.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="colors2.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="colors3.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="inject.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
   </ItemGroup>

@@ -40,6 +40,7 @@ Index of this file:
 #endif
 #include "imgui_internal.h"
 #include <map>
+#include "../colors2.h"
 // System includes
 #include <ctype.h>      // toupper
 #if defined(_MSC_VER) && _MSC_VER <= 1500 // MSVC 2008 or earlier
@@ -1008,27 +1009,27 @@ bool ImGui::ScrollbarEx(const ImRect& bb_frame, ImGuiID id, ImGuiAxis axis, ImS6
     return held;
 }
 
-void ImGui::Image(ImTextureID user_texture_id, const ImVec2& size, const ImVec2& uv0, const ImVec2& uv1, const ImVec4& tint_col, const ImVec4& border_col)
+void ImGui::Image(ImTextureID user_texture_id, const ImVec2& size, const ImVec2& uv0, const ImVec2& uv1, const ImVec4& tint_col, const ImVec4& color)
 {
     ImGuiWindow* window = GetCurrentWindow();
     if (window->SkipItems)
         return;
 
     ImRect bb(window->DC.CursorPos, window->DC.CursorPos + size);
-    if (border_col.w > 0.0f)
+    if (color.w > 0.0f)
         bb.Max += ImVec2(2, 2);
     ItemSize(bb);
     if (!ItemAdd(bb, 0))
         return;
 
-    if (border_col.w > 0.0f)
+    if (color.w > 0.0f)
     {
-        window->DrawList->AddRect(bb.Min, bb.Max, GetColorU32(border_col), 0.0f);
-        window->DrawList->AddImage(user_texture_id, bb.Min + ImVec2(1, 1), bb.Max - ImVec2(1, 1), uv0, uv1, GetColorU32(tint_col));
+        //window->DrawList->AddRect(bb.Min, bb.Max, GetColorU32(color), 0.0f);
+        window->DrawList->AddImage(user_texture_id, bb.Min + ImVec2(1, 1), bb.Max - ImVec2(1, 1), uv0, uv1, GetColorU32(color));
     }
     else
     {
-        window->DrawList->AddImage(user_texture_id, bb.Min, bb.Max, uv0, uv1, GetColorU32(tint_col));
+        window->DrawList->AddImage(user_texture_id, bb.Min, bb.Max, uv0, uv1, GetColorU32(color));
     }
 }
 
@@ -1125,9 +1126,9 @@ bool ImGui::Checkbox(const char* label, bool* v)
     //window->DrawList->AddRectFilled(total_bb.Min, total_bb.Min + ImVec2(square_sz, square_sz), ImColor(32, 33, 35), 12.0f);
    // window->DrawList->AddRectFilled(total_bb.Min, total_bb.Min + ImVec2(square_sz, square_sz), ImColor(22 / 255.0f, 118 / 255.0f, 243 / 255.0f, it_anim->second.selected_rect), 12.0f);
     window->DrawList->AddRectFilled(ImVec2(pos.x - 0, pos.y + 0), ImVec2(pos.x + 145, pos.y + 31), ImColor(55 / 255.0f, 55 / 255.0f, 55 / 255.0f, it_anim->second.selected_rect), 4);
-    
-    window->DrawList->AddRectFilled(ImVec2(pos.x + 55, pos.y + 28), ImVec2(pos.x + 90, pos.y + 31), ImColor(0 / 255.0f, 150 / 255.0f, 214 / 255.0f, it_anim->second.selected_rect), 4, ImDrawFlags_RoundCornersTop);
-    window->DrawList->AddRect(ImVec2(pos.x - 0, pos.y + 0), ImVec2(pos.x + 145, pos.y + 31), ImColor(0 / 255.0f, 150 / 255.0f, 214 / 255.0f, it_anim->second.selected_rect), 4);
+   // window->DrawList->AddCircleFilled(ImVec2(pos.x - 0, pos.y + 0), 5, ImColor(55 / 255.0f, 55 / 255.0f, 55 / 255.0f, it_anim->second.selected_rect), 4);
+    window->DrawList->AddRectFilled(ImVec2(pos.x + 55, pos.y + 28), ImVec2(pos.x + 90, pos.y + 31), ImColor(one1,two1,three1, it_anim->second.selected_rect), 4, ImDrawFlags_RoundCornersTop);
+   // window->DrawList->AddRect(ImVec2(pos.x - 0, pos.y + 0), ImVec2(pos.x + 145, pos.y + 31), ImColor(0 / 255.0f, 150 / 255.0f, 214 / 255.0f, it_anim->second.selected_rect), 4);
    // window->DrawList->AddCircleFilled(ImVec2(pos.x + 10, pos.y + 15), 7, ImColor(0  / 255.0f, 150 / 255.0f, 214 / 255.0f, it_anim->second.selected_rect), 0);
    // window->DrawList->AddRectFilled(ImVec2(pos.x + 137, pos.y + 0), ImVec2(pos.x + 145, pos.y + 30), ImColor(69 / 255.0f, 69 / 255.0f, 69 / 255.0f, it_anim->second.selected_rect), 9, ImDrawFlags_RoundCornersRight);
     //   window->DrawList->AddRectFilled(ImVec2(pos.x + 141, pos.y + 10), ImVec2(pos.x + 144, pos.y + 13), ImColor(255 / 255.0f, 255 / 255.0f, 255 / 255.0f, it_anim->second.selected_rect), 20);
@@ -1187,7 +1188,7 @@ bool ImGui::Checkbox2(const char* label, bool* v)
   //  window->DrawList->AddRectFilled(ImVec2(pos.x - 0, pos.y + 0), ImVec2(pos.x + 145, pos.y + 31), ImColor(55 / 255.0f, 55 / 255.0f, 55 / 255.0f, it_anim->second.selected_rect), 4);
    // window->DrawList->AddRectFilled(ImVec2(pos.x + 55, pos.y + 28), ImVec2(pos.x + 90, pos.y + 31), ImColor(0 / 255.0f, 150 / 255.0f, 214 / 255.0f, it_anim->second.selected_rect), 9, ImDrawFlags_RoundCornersTop);
     window->DrawList->AddCircleFilled(ImVec2(pos.x + 10, pos.y + 15.5), 7, ImColor(55  / 255.0f, 55 / 255.0f, 55 / 255.0f, it_anim->second.selected_rect), 0);
-    window->DrawList->AddCircleFilled(ImVec2(pos.x + 10, pos.y + 15.5), 5, ImColor(0  / 255.0f, 150 / 255.0f, 214 / 255.0f, it_anim->second.selected_rect), 0);
+    window->DrawList->AddCircleFilled(ImVec2(pos.x + 10, pos.y + 15.5), 5, ImColor(one1, two1, three1, it_anim->second.selected_rect), 0);
     // window->DrawList->AddRectFilled(ImVec2(pos.x + 137, pos.y + 0), ImVec2(pos.x + 145, pos.y + 30), ImColor(69 / 255.0f, 69 / 255.0f, 69 / 255.0f, it_anim->second.selected_rect), 9, ImDrawFlags_RoundCornersRight);
      //   window->DrawList->AddRectFilled(ImVec2(pos.x + 141, pos.y + 10), ImVec2(pos.x + 144, pos.y + 13), ImColor(255 / 255.0f, 255 / 255.0f, 255 / 255.0f, it_anim->second.selected_rect), 20);
        // window->DrawList->AddRectFilled(ImVec2(pos.x + 141, pos.y + 14), ImVec2(pos.x + 144, pos.y + 17), ImColor(255 / 255.0f, 255 / 255.0f, 255 / 255.0f, it_anim->second.selected_rect), 20);
@@ -3107,7 +3108,7 @@ bool ImGui::SliderScalar(const char* label, ImGuiDataType data_type, void* p_dat
     const char* value_buf_end = value_buf + DataTypeFormatString(value_buf, IM_ARRAYSIZE(value_buf), data_type, p_data, format);
 
     window->DrawList->AddRectFilled(frame_bb.Min, frame_bb.Max, ImColor(32, 33, 35), 5.0f);
-    window->DrawList->AddRectFilled(frame_bb.Min, ImVec2(grab_bb.Min.x + 8, frame_bb.Max.y), ImColor(0, 179, 255), 5.0f);
+    window->DrawList->AddRectFilled(frame_bb.Min, ImVec2(grab_bb.Min.x + 8, frame_bb.Max.y), ImColor(one1, two1, three1), 5.0f);
 
     RenderText(total_bb.Min + ImVec2(10, 0), label);
 
@@ -6425,7 +6426,7 @@ bool ImGui::Selectable(const char* label, bool selected, ImGuiSelectableFlags fl
     it_anim->second.checkmark_anim = ImLerp(it_anim->second.checkmark_anim, selected ? 1.0f : 0.0f, 0.10f * (1.0f - ImGui::GetIO().DeltaTime));
 
     window->DrawList->AddRectFilled(bb.Min, bb.Max, ImColor(1.0f, 1.0f, 1.0f, it_anim->second.opacity * 0.1f), 3.0f);
-    RenderCheckMark(window->DrawList, ImVec2(bb.Min.x + 8, bb.Min.y + 9), ImColor(22 / 255.0f, 118 / 255.0f, 243 / 255.0f, it_anim->second.checkmark_anim), 9.0f);
+    RenderCheckMark(window->DrawList, ImVec2(bb.Min.x + 8, bb.Min.y + 9), ImColor(one1, two1, three1, it_anim->second.checkmark_anim), 9.0f);
 
     window->DrawList->AddText(text_min + ImVec2(18, 1), GetColorU32(ImGuiCol_Text), label);
 

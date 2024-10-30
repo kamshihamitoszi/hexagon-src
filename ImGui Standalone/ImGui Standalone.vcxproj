@@ -155,7 +155,6 @@
     <ClCompile Include="Hook\Minhook\src\hook.c" />
     <ClCompile Include="Hook\Minhook\src\trampoline.c" />
     <ClCompile Include="ImGui\imgui.cpp" />
-    <ClCompile Include="ImGui\imgui_demo.cpp" />
     <ClCompile Include="ImGui\imgui_draw.cpp" />
     <ClCompile Include="ImGui\imgui_impl_dx11.cpp" />
     <ClCompile Include="ImGui\imgui_impl_win32.cpp" />
@@ -168,6 +167,9 @@
   <ItemGroup>
     <ClInclude Include="byte.h" />
     <ClInclude Include="cipa.h" />
+    <ClInclude Include="colors.h" />
+    <ClInclude Include="colors2.h" />
+    <ClInclude Include="colors3.h" />
     <ClInclude Include="Drawing.h" />
     <ClInclude Include="elements.h" />
     <ClInclude Include="gwalt.h" />
@@ -201,6 +203,7 @@
     <ClInclude Include="ImGui\imstb_truetype.h" />
     <ClInclude Include="imgui_edited.h" />
     <ClInclude Include="imgui_settings.h" />
+    <ClInclude Include="inject.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="texture.h" />
     <ClInclude Include="UI.h" />
